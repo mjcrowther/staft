@@ -99,7 +99,7 @@ program staft_pred
 	
 		//CI option
 		if "`ci'"!="" {
-			local ciopt "ci(`newvarname'_lci `newvarname'_uci)"
+			local ciopt "ci(`newvarname'_lci `newvarname'_uci) level(`level')"
 		}
 		
 		if "`stdp'"!="" {
@@ -228,7 +228,7 @@ program staft_pred
 			}
 			//log hazard
 
-			predictnl double `newvarname' = `linpred' + log(`linpred2') - log(`t') + log(`dxbpred' + 1) if `touse'
+			predictnl double `newvarname' = `linpred' + log(`linpred2') - log(`t') + log(1 - `dxbpred') if `touse'
 			
 			if "`ci'"!="" | "`stdp'"!="" {
 				tempvar se
@@ -249,6 +249,7 @@ program staft_pred
 					foreach var in `e(tvc)' {
 						local Ntvcparams = `Ntvcparams' + `: word count `e(drcsterms_`var')''
 						local tvcvars `tvcvars' `e(rcsterms_`var')'
+						local dtvcvars `dtvcvars' `e(drcsterms_`var')'
 					}
 				}
 							
@@ -416,16 +417,19 @@ void staft_pred_get_se_logh()
 	}
 
 	rcsbetas = betas[(Ncovsinxb+1)..(Nparams-1),] //no intercept
+	//d log hazard / d lntxb
+	dlnh = maindrcs * rcsbetas :+ (maind2rcs * rcsbetas):/(maindrcs * rcsbetas)
+
 	//covariates (non-tvcs)
-	G = (maindrcs * rcsbetas :+ (maind2rcs * rcsbetas):/(maindrcs * rcsbetas)) :* (-covs) 
+	G = dlnh :* (-covs) 
 
 	//covariates (tvcs)
 	if (st_global("e(tvc)")!="") {
-		G = G,(G :+ (1:/(st_data(.,st_local("tvcdxb"),touse):+1)) :* st_data(.,tokens(st_local("tvcvars")),touse) )
+		G = G,(dlnh :* (-st_data(.,tokens(st_local("tvcvars")),touse)) :- st_data(.,tokens(st_local("dtvcvars")),touse) :/ (1 :- st_data(.,st_local("tvcdxb"),touse)))
 	}
 
 	//main splines
-	G = G,(mainrcs :+ mainrcs:/(maindrcs * rcsbetas))
+	G = G,(mainrcs[,1..cols(maindrcs)] :+ maindrcs:/(maindrcs * rcsbetas)),J(Nobs,1,1)
 
 	se = sqrt(quadrowsum((G*V):*G))
 	st_store(.,st_local("se"),touse,se)
