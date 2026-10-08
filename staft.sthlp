@@ -236,7 +236,7 @@ Please report any errors you may find.{p_end}
 {title:References}
 
 {pstd}
-Crowther MJ, Royston P, Clements M. A flexible parametric accelerated failure time model. https://arxiv.org/abs/2006.06807
+Crowther MJ, Royston P, Clements M. A flexible parametric accelerated failure time model and the extension to time-dependent acceleration factors. Biostatistics 2023;24(3):811-831. https://doi.org/10.1093/biostatistics/kxac009
 {p_end}
 
 {pstd}
