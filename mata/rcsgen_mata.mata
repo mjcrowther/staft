@@ -1,3 +1,6 @@
+// Restricted cubic spline functions for staft.
+// Adapted in part from rcsgen by Paul C. Lambert, available from SSC (ssc describe rcsgen).
+
 version 15.1
 
 local RC real colvector

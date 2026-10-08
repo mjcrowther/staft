@@ -233,6 +233,15 @@ are convergence problems.
 Please report any errors you may find.{p_end}
 
 
+{title:Acknowledgements}
+
+{pstd}
+{cmd:staft} generates its restricted cubic spline basis functions with {helpb rcsgen}, written by Paul C. Lambert 
+with the contributors named in its help file, and available from SSC. The file {cmd:rcsgen2.ado}, installed with 
+{cmd:staft} to calculate second derivatives of the spline functions, is adapted from {cmd:rcsgen}.
+{p_end}
+
+
 {title:References}
 
 {pstd}

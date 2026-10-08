@@ -1,3 +1,6 @@
+*! rcsgen2: second derivatives of restricted cubic spline basis functions, for staft
+*! Adapted from rcsgen by Paul C. Lambert, available from SSC (ssc describe rcsgen)
+
 program define rcsgen2, rclass
 	version 10.0
 	syntax  [varlist(default=none)] [if] [in] ,	[       ///
