@@ -225,9 +225,9 @@ are convergence problems.
 {title:Author}
 
 {pstd}Michael J. Crowther{p_end}
-{pstd}Department of Medical Epidemiology and Biostatistics{p_end}
-{pstd}Karolinska Institutet{p_end}
-{pstd}E-mail: {browse "mailto:michael.crowther@ki.se":michael.crowther@ki.se}{p_end}
+{pstd}Red Door Analytics AB{p_end}
+{pstd}Stockholm, Sweden{p_end}
+{pstd}E-mail: {browse "mailto:michael.crowther@reddooranalytics.se":michael.crowther@reddooranalytics.se}{p_end}
 
 {phang}
 Please report any errors you may find.{p_end}
