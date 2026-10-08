@@ -1,7 +1,11 @@
-*! version 0.1.0 23jun2017 MJC
+*! version 1.1.0 08oct2026 MJC
 
 /*
 History
+MJC 08oct2026: version 1.1.0 - hazard prediction fixed for tvcs; standard error of hazard prediction fixed
+                             - level() now passed to the xb and af confidence intervals
+                             - stdp now returns the prediction and its standard error on the natural scale;
+                               ci and stdp can not be combined
 MJC 27jun2017: version 0.1.2 - af prediction fixed for tvcs
 MJC 26jun2017: version 0.1.1 - bug fix for xb prediction
 MJC 23jun2017: version 0.1.0
@@ -63,6 +67,11 @@ program staft_pred
 		
 		if "`afnum'"!="" & "`at'"!="" {
 			di as error "Can't use both afnum() and at()"
+			exit 198
+		}
+		
+		if "`ci'"!="" & "`stdp'"!="" {
+			di as error "Can't use both ci and stdp"
 			exit 198
 		}
 		
@@ -338,20 +347,32 @@ program staft_pred
 		restore
 		merge 1:1 _n using `newvars', nogenerate noreport
 		
-		if ("`hazard'"!="" | "`cumhazard'"!="" | "`af'"!="") & "`stdp'"=="" {
+		if "`hazard'"!="" | "`cumhazard'"!="" | "`af'"!="" {
 			qui replace `newvarname' = exp(`newvarname')
 			if "`ci'" != "" { 
 				qui replace `newvarname'_lci = exp(`newvarname'_lci)
 				qui replace `newvarname'_uci = exp(`newvarname'_uci)
 			}
+			if "`stdp'" != "" { 
+				//se of the prediction itself, from the se of its log
+				qui replace `newvarname'_se = `newvarname'_se * `newvarname'
+			}
 		}
 		
-		if "`survival'"!="" & "`stdp'"=="" {
+		if "`survival'"!="" {
+			if "`stdp'" != "" { 
+				//se of survival, from the se of log(-log(survival))
+				qui replace `newvarname'_se = `newvarname'_se * exp(`newvarname') * exp(-exp(`newvarname'))
+			}
 			qui replace `newvarname' = exp(-exp(`newvarname'))
 			if "`ci'" != "" { 
 				qui gen double `newvarname'_lci = exp(-exp(`surv_uci'))
 				qui gen double `newvarname'_uci = exp(-exp(`surv_lci'))
 			}		
+		}
+		
+		if "`stdp'"!="" & "`xb'"=="" {
+			di as txt "note: stdp now returns `newvarname' and its standard error on the natural scale; see help staft postestimation"
 		}
 	
 end

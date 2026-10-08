@@ -85,8 +85,19 @@ stores the confidence limits in {it:newvar}{cmd:_lci} and
 {it:newvar}{cmd:_uci}.
 
 {phang}
-{opt stdp} calculates standard error of prediction and stores it in
-{newvar}{cmd:_se}. 
+{opt stdp} calculates the standard error of the prediction and stores it in
+{newvar}{cmd:_se}. The standard error is that of the prediction itself, on the scale of the
+prediction, obtained with the delta method; for example, {cmd:predict s, survival stdp}
+stores the survival function in {cmd:s} and its standard error in {cmd:s_se}.
+Confidence intervals should be obtained with {opt ci}, which calculates them on a
+transformed scale (the log hazard, the log cumulative hazard, log(-log S(t)) and the
+log acceleration factor); {opt stdp} cannot be combined with {opt ci}.
+
+{pmore}
+In version 1.0.1 and earlier, {opt stdp} returned both {newvar} and {newvar}{cmd:_se}
+on that transformed scale. Those values can be recovered, for example, as
+{cmd:ln(-ln(s))} and {cmd:s_se/(s*(-ln(s)))} for the survival function, and as
+{cmd:ln(h)} and {cmd:h_se/h} for the hazard.
 
 {phang}
 {opt timevar(varname)} defines the variable used as time in the predictions.

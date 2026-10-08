@@ -1,7 +1,11 @@
-*! version 1.0.1 20jan2022 MJC
+*! version 1.1.0 08oct2026 MJC
 
 /*
 History
+MJC 08oct2026: version 1.1.0 - predict: hazard fixed for tvcs; standard error of hazard fixed
+                             - predict: level() now passed to the xb and af confidence intervals
+                             - predict: stdp now returns the prediction and its standard error on the natural scale;
+                               ci and stdp can not be combined
 MJC 20jan2022: version 1.0.1 - bug fix; equation names for scalar parameters not updated for v15 - now fixed
 							 - version statements added
 MJC 24nov2021: version 1.0.0 - rebasing, moved to github
