@@ -40,7 +40,9 @@ The options are described in the help file: `help staft`.
 
 ## Version
 
-Version 1.1.0 (8 October 2026). It corrects predictions made after estimation:
+Version 1.2.0 (9 October 2026). Covariates that are constant in the estimation sample, or collinear with a constant and each other, are now omitted with a note, as `streg` does. In earlier versions they were estimated, which changed the fitted model.
+
+Version 1.1.0 (8 October 2026) corrected predictions made after estimation:
 
 - the predicted hazard after `tvc()`, and the standard error of the predicted hazard;
 - `level()` is now passed to the confidence intervals of `xb` and `af`;

@@ -1,7 +1,9 @@
-*! version 1.1.0 08oct2026 MJC
+*! version 1.2.0 09oct2026 MJC
 
 /*
 History
+MJC 09oct2026: version 1.2.0 - covariates that are constant in the estimation sample, or collinear with a constant
+                               and each other, are now omitted with a note, as streg does; before, they were estimated
 MJC 08oct2026: version 1.1.0 - predict: hazard fixed for tvcs; standard error of hazard fixed
                              - predict: level() now passed to the xb and af confidence intervals
                              - predict: stdp now returns the prediction and its standard error on the natural scale;
@@ -125,6 +127,20 @@ program Estimate, eclass
         if `r(N)' == 0 {
                 display in red "No observations"
                 exit 2000
+        }
+        
+        // Covariates that are constant in the estimation sample, or collinear with a constant and each other,
+        // are omitted with a note, the same ones streg omits. The covariate equation has no constant of its
+        // own, so ml would otherwise estimate them, as a shift of the spline against its knots
+        if "`varlist'"!="" {
+                _rmcoll `varlist' if `touse'
+                local keepvars
+                foreach var in `r(varlist)' {
+                        if substr("`var'",1,2)!="o." {
+                                local keepvars `keepvars' `var'
+                        }
+                }
+                local varlist `keepvars'
         }
         
         qui count if `touse' & _d

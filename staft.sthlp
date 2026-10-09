@@ -51,6 +51,9 @@ You must {cmd:stset} your data before using {cmd:stgenreg}; see {manhelp stset S
 {cmd:fweights}, {cmd:iweights}, and {cmd:pweights} may be specified using stset; {manhelp stset ST}.{p_end}
 {p 4 6 2}
 Factor variables are not currently supported.{p_end}
+{p 4 6 2}
+Covariates that are constant in the estimation sample, or collinear with a constant and each other, are omitted with a note,
+as {helpb streg} does. In version 1.1.0 and earlier they were estimated.{p_end}
 
 
 {title:Description}
